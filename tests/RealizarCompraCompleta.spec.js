@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { ProductsPage } from "../page-objects/ProductsPage.js"
 
-test.only("RealizarCompraCompleta", async ({ page }) => {
+test("RealizarCompraCompleta", async ({ page }) => {
     const productsPage = new ProductsPage(page)
     await productsPage.visit()
     await productsPage.addProductToBasket(0)
