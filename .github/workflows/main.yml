@@ -23,4 +23,4 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Rodar os testes
-        run: npm test
+        run: xvfb-run npx playwright test
