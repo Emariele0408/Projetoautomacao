@@ -8,7 +8,7 @@ jobs:
   playwrighttests:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.55.1-focal
+      image: mcr.microsoft.com/playwright:v1.55.1-jammy
 
     steps:
       - name: Checkout repository
@@ -34,7 +34,7 @@ jobs:
         run: ./shopping-store-linux-amd64 &
 
       - name: Wait for app to be ready
-        run: npx wait-on http://localhost:3000   # ajuste a porta conforme sua aplicação
+        run: npx wait-on http://localhost:3000  
 
       - name: Install dependencies from lockfile
         run: npm ci
@@ -43,7 +43,7 @@ jobs:
         run: npm run test:ci
 
       - name: Upload Playwright HTML report
-        if: always() # garante que será feito mesmo se os testes falharem
+        if: always() 
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
