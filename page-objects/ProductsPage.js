@@ -8,7 +8,10 @@ export class ProductsPage {
     }
 
     visit = async () => {
-        await this.page.goto("https://practice.automationtesting.in/")
+        await this.page.goto("https://practice.automationtesting.in/", {
+            timeout: 60000,  
+            waitUntil: "load" 
+        });
     }
 
     getBasketCount = async () => {
