@@ -1,0 +1,36 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  playwrighttests:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.55.1-focal
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache npm
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Give execution permission to shopping store
+        run: chmod +x ./shopping-store-linux-amd64
+      - name: Start shopping store application
+        run: ./shopping-store-linux-amd64 & 
+      - name: Wait for app to be ready
+        run: npx wait-on http://localhost:3000   
+      - name: Install dependencies from lockfile
+        run: npm ci
+      - name: Run Playwright tests
+        run: npm run test:ci

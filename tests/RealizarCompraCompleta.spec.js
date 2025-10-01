@@ -3,7 +3,7 @@ import { ProductsPage } from "../page-objects/ProductsPage.js";
 import { Navigation } from "../page-objects/Navigation.js";
 import { CheckoutPage } from "../page-objects/CheckoutPage.js";
 
-test.only("RealizarCompraCompleta", async ({ page }) => {
+test("RealizarCompraCompleta", async ({ page }) => {
 
     const productsPage = new ProductsPage(page)
     await productsPage.visit()
