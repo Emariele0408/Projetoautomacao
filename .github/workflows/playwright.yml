@@ -2,7 +2,7 @@ name: Playwright Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   playwrighttests:
@@ -19,45 +19,12 @@ jobs:
         with:
           node-version: 18
 
-      - name: Cache npm
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      - name: Start shopping store and run Playwright tests
+        run: |
+          echo "Start the shopping store application"
+          ./shopping-store-linux-amd64 &
+          echo "Install dependencies from lockfile"
+          npm ci
+          echo "Run playwright tests"
+          npm run test:ci
 
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.22
-      - name: Build shopping store app
-        run: go build -o shopping-store-linux-amd64 ./cmd/shopping-store
-
-      - name: Start shopping store application
-        run: ./shopping-store-linux-amd64 &
-
-      - name: Wait for app to be ready
-        run: npx wait-on http://localhost:3000  
-
-      - name: Install dependencies from lockfile
-        run: npm ci
-
-      - name: Run Playwright tests
-        run: npm run test:ci
-
-      - name: Upload Playwright HTML report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report
-          retention-days: 7
-
-      - name: Upload Playwright traces and results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-test-results
-          path: test-results
-          retention-days: 7
